@@ -16,13 +16,22 @@ public class MainActivity extends AppCompatActivity {
                     {R.id.bt10, R.id.bt11, R.id.bt12},
                     {R.id.bt20, R.id.bt21, R.id.bt22},
             };
-    public static final String SIGN_X = "+";
-    public static final String SIGN_O = "-";
-    public static final String SIGN_EMPTY = ".";
+    public static final String SIGN_X = "X";
+    public static final String SIGN_O = "0";
+    public static final String SIGN_EMPTY = " ";
 
     private Button[][] btArr = new Button[3][3];
 
-    private AI ai;
+    public static int[][] lines = {{0,0,0,1,0,2},
+            {1,0,1,1,1,2},
+            {2,0,2,1,2,2},
+            {0,0,1,0,2,0},
+            {0,1,1,1,2,1},
+            {0,2,1,2,2,2},
+            {0,0,1,1,2,2},
+            {0,2,1,1,2,0}};
+
+    private com.example.teacher.myapplication.AI ai;
 
     /**
      * current game state
@@ -58,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 if(gameState == GAME_IN_PROCESS) {
-                    ai.nextStep();
+                    int[] step = {0, 0};
+                    step = ai.nextStep();
+                    btArr[step[0]][step[1]].setText(SIGN_O);
                     afterStep();
                 }
             }
@@ -130,30 +141,18 @@ public class MainActivity extends AppCompatActivity {
      */
     private int checkGameState() {
 
-        for (int i = 0; i < btArr.length; i++) {
-            //horizontal lines
-            if(btArr[0][i].getText().equals(btArr[1][i].getText()) &&
-                    btArr[1][i].getText().equals(btArr[2][i].getText()) &&
-                    !btArr[0][i].getText().equals(SIGN_EMPTY)){
-                if(btArr[0][i].getText().equals(SIGN_O)) {
-                    return GAME_OVER_LOS;
-                } else {
-                    return GAME_OVER_WIN;
-                }
-            }
-            //vertical lines
-            if(btArr[i][0].getText().equals(btArr[i][1].getText()) &&
-                    btArr[i][1].getText().equals(btArr[i][2].getText()) &&
-                    !btArr[i][0].getText().equals(SIGN_EMPTY)){
-                if(btArr[i][0].getText().equals(SIGN_O)) {
+        for (int i = 0; i < lines.length; i++) {
+            CharSequence first = btArr[lines[i][0]][lines[i][1]].getText();
+            CharSequence second = btArr[lines[i][2]][lines[i][3]].getText();
+            CharSequence third = btArr[lines[i][4]][lines[i][5]].getText();
+            if(first.equals(second) && second.equals(third) && !third.equals(SIGN_EMPTY)){
+                if(first.equals(SIGN_O)) {
                     return GAME_OVER_LOS;
                 } else {
                     return GAME_OVER_WIN;
                 }
             }
         }
-        //check for cross
-        //...
         //check for available steps
         for (int i = 0; i < btArr.length; i++) {
             for (int j = 0; j < btArr[i].length; j++) {

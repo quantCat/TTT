@@ -1,9 +1,5 @@
 package com.example.teacher.myapplication;
 
-/**
- * Created by Teacher on 1/19/2017.
- */
-
 import android.widget.Button;
 
 import java.util.Random;
@@ -13,12 +9,18 @@ public class AI {
 
     private int level;
     private static Random random = new Random();
-    private final String signMy;
+    private String signMy;
+    private String signPlaye;
+    private String empty;
+    private static int[][] lines;
 
     public AI(Button[][] btArr, int currentLevel) {
         this.btArr = btArr;
         level = currentLevel;
         signMy = MainActivity.SIGN_O;
+        signPlaye = MainActivity.SIGN_X;
+        empty = MainActivity.SIGN_EMPTY;
+        lines = MainActivity.lines;
     }
 
     public AI(Button[][] btArr, int currentLevel, String signMy) {
@@ -27,32 +29,39 @@ public class AI {
         this.signMy = signMy;
     }
 
-    public boolean nextStep() {
-        switch (level){
+    public int[] nextStep() {
+        int x = -1, y = -1;
+        switch (level) {
             default:
-                for(int i=0;i<10;i++) {
-                    if (changeValue(random.nextInt(3), random.nextInt(3))) {
-                        return true;
+                for (int i = 0; i < lines.length; i++) {
+                    CharSequence first = btArr[lines[i][0]][lines[i][1]].getText();
+                    CharSequence second = btArr[lines[i][2]][lines[i][3]].getText();
+                    CharSequence third = btArr[lines[i][4]][lines[i][5]].getText();
+                    if (first.equals(signPlaye) && second.equals(signPlaye) && third.equals(empty)) {
+                        x = lines[i][4];
+                        y = lines[i][5];
+                        break;
+                    }
+                    else if (first.equals(signPlaye) && third.equals(signPlaye) && second.equals(empty)) {
+                        x = lines[i][2];
+                        y = lines[i][3];
+                        break;
+                    }
+                    else if (second.equals(signPlaye) && third.equals(signPlaye) && first.equals(empty)) {
+                        x = lines[i][0];
+                        y = lines[i][1];
+                        break;
                     }
                 }
-            case 0:
-                for (int i = 0; i < btArr.length; i++) {
-                    for (int j = 0; j < btArr[i].length; j++) {
-                        if(changeValue(i, j)){
-                            return true;
-                        }
+                if (x == -1 && y == -1) {
+                    x = 0; y = 0;
+                    while (!btArr[x][y].getText().equals(empty)) {
+                        x = random.nextInt(3);
+                        y = random.nextInt(3);
                     }
                 }
-                break;
         }
-        return false;
-    }
-
-    private boolean changeValue(int i, int j){
-        if(btArr[i][j].getText().equals(MainActivity.SIGN_EMPTY)){
-            btArr[i][j].setText(signMy);
-            return true;
-        }
-        return false;
+        int[] ret = {x, y};
+        return ret;
     }
 }
