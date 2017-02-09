@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">XO</string>
+    <string name="game_over_los">You lose!!!</string>
+    <string name="game_over_win">You winner!!!</string>
+</resources>
