@@ -1,5 +1,6 @@
 package com.example.teacher.myapplication;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String SIGN_X = "X";
     public static final String SIGN_O = "0";
     public static final String SIGN_EMPTY = " ";
+    public static final int SIGN_X_COLOR = Color.MAGENTA;
+    public static final int SIGN_O_COLOR = Color.BLUE;
+    public static final int SIGN_EMPTY_COLOR = Color.GRAY;
 
     private Button[][] btArr = new Button[3][3];
 
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 if(gameState == GAME_IN_PROCESS) {
                     if(((Button) v).getText().equals(SIGN_EMPTY)) {
                         ((Button) v).setText(SIGN_X);
+                        ((Button) v).setTextColor(SIGN_X_COLOR);
                         afterStep();
                     } else {
                         return;
@@ -70,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     int[] step = {0, 0};
                     step = ai.nextStep();
                     btArr[step[0]][step[1]].setText(SIGN_O);
+                    btArr[step[0]][step[1]].setTextColor(SIGN_O_COLOR);
                     afterStep();
                 }
             }
@@ -83,13 +89,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        ai = new AI(btArr, 0);
+        ai = new AI(btArr, 0, SIGN_O);
 
         //use SeekBar for set haw smart is our AI
         ((SeekBar)findViewById(R.id.seek_bar_level)).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                ai = new AI(btArr, progress);
+                ai = new AI(btArr, progress, SIGN_O);
             }
 
             @Override
@@ -113,10 +119,10 @@ public class MainActivity extends AppCompatActivity {
     private void startGame() {
         gameState = 0;
         postMessage("Your turn!!!");
-
         for (int i = 0; i < btArr.length; i++) {
             for (int j = 0; j < btArr[i].length; j++) {
                 btArr[i][j].setText(SIGN_EMPTY);
+                btArr[i][j].setTextColor(SIGN_EMPTY_COLOR);
             }
         }
     }
@@ -131,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 postMessage(getString(R.string.game_over_win));
                 break;
             case GAME_OVER_NONE:
-                postMessage("There no winners!!!");
+                postMessage(getString(R.string.game_over_draw));
                 break;
         }
     }
