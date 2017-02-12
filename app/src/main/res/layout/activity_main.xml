@@ -113,14 +113,26 @@
         android:layout_alignStart="@+id/info_txt"
         android:layout_alignEnd="@+id/bt_new_game" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pres button to start the game"
+        android:id="@+id/game_result_txt"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/seek_bar_level"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp" />
+
     <Button
         android:text="New Game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/bt_new_game"
         android:onClick="newGame"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="370dp"
         android:layout_below="@+id/seek_bar_level"
+        android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/bt21" />
 
 </RelativeLayout>

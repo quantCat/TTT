@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void postMessage(String message){
         //set message to TextView
-        ((TextView)findViewById(R.id.info_txt)).setText(message);
+        ((TextView)findViewById(R.id.game_result_txt)).setText(message);
         //show toast
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
